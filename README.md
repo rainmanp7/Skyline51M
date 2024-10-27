@@ -3,7 +3,7 @@
 
 **Introduction**
 
-Skyline51M is an Artificial General Intelligence (AGI) machine learning model designed to push the boundaries of AI capabilities. This repository contains the source code for the Skyline51M model, which is built using Python and leverages various machine learning libraries.
+Skyline51M is an Artificial General Intelligence (AGI) machine learning model designed to push the boundaries of AI capabilities. This repository contains the source code for the Skyline51M model, which is built using Python and leverages various machine learning libraries. Complexity based AGI Framework.
 
 **Files**
 
