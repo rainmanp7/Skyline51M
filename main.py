@@ -7,6 +7,7 @@ from optimization import parallel_bayesian_optimization
 from knowledge_base import SimpleKnowledgeBase
 from models import choose_model_based_on_complexity
 from skopt.space import Real, Integer
+from sklearn.model_selection import train_test_split
 
 async def main():
     logger = setup_logging()
@@ -27,6 +28,8 @@ async def main():
         'min_samples_split': Integer(2, 10),
         'min_samples_leaf': Integer(1, 10),
     }
+
+    
     
     # Run optimization
     best_params, best_score = await parallel_bayesian_optimization(
