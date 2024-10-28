@@ -1,18 +1,18 @@
-import functools
 
-@functools.lru_cache(maxsize=1024)
-def get_complexity_factor(input_data):
-    try:
-        complexity_factor = len(input_data)
-        return complexity_factor
-    except Exception as e:
-        logging.error(f"Error in get_complexity_factor: {str(e)}")
-        return 0
-
-def choose_num_iterations_based_on_complexity(complexity_factor):
+# Beginning of complexity.py
+def choose_model_based_on_complexity(complexity_factor):
     if complexity_factor < 10:
-        return 50
+        return SimpleModel()
     elif 10 <= complexity_factor < 100:
-        return 100
+        return MediumModel()
     else:
-        return 200
+        return ComplexModel()
+
+def choose_evaluation_metric(complexity_factor):
+    if complexity_factor < 10:
+        return mean_squared_error
+    elif 10 <= complexity_factor < 100:
+        return mean_absolute_error
+    else:
+        return partial(mean_squared_error, squared=False)
+# End of complexity.py
