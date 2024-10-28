@@ -101,71 +101,81 @@ The original code base inside.
 7. complexity.py
 8. parallel_utils.py
 9. main.py
+Each module's beginning and end marked separately using comments.
+
+```json
+# Beginning of config.json
+{
+  "inputs": [
+    "wi0",
+    "vector_dij"
+  ],
+  "weights_and_biases": [
+    "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "φ"
+  ],
+  "activation_functions": [
+    "dynamic_activation_function_based_on_complexity_wi0", 
+    "dynamic_activation_function_based_on_complexity_vector_dij"
+  ],
+  "complexity_factor": "dynamic_complexity_factor",
+  "preprocessing": "dynamic_preprocessing_based_on_complexity",
+  "ensemble_learning": "dynamic_ensemble_learning_based_on_complexity",
+  "hyperparameter_tuning": "dynamic_hyperparameter_settings_based_on_complexity",
+  "assimilation": {
+    "enabled": true,
+    "knowledge_base": "dynamic_knowledge_base"
+  },
+  "self_learning": {
+    "enabled": true,
+    "learning_rate": "dynamic_learning_rate",
+    "num_iterations": "dynamic_num_iterations",
+    "objective_function": "dynamic_objective_function"
+  },
+  "dynamic_adaptation": {
+    "enabled": true,
+    "adaptation_rate": "dynamic_adaptation_rate",
+    "adaptation_range": "dynamic_adaptation_range"
+  },
+  "learning_strategies": [
+    {
+      "name": "incremental_learning",
+      "enabled": true,
+      "learning_rate": "dynamic_learning_rate",
+      "num_iterations": "dynamic_num_iterations"
+    },
+    {
+      "name": "batch_learning",
+      "enabled": true,
+      "learning_rate": "dynamic_learning_rate",
+      "num_iterations": "dynamic_num_iterations"
+    }
+  ]
+}
+# End of config.json
+```
 
 ```python
-# config.json
-{
-    "inputs": ["wi0", "vector_dij"],
-    "weights_and_biases": ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "φ"],
-    "activation_functions": [
-        "dynamic_activation_function_based_on_complexity_wi0",
-        "dynamic_activation_function_based_on_complexity_vector_dij"
-    ],
-    "complexity_factor": "dynamic_complexity_factor",
-    "preprocessing": "dynamic_preprocessing_based_on_complexity",
-    "ensemble_learning": "dynamic_ensemble_learning_based_on_complexity",
-    "hyperparameter_tuning": "dynamic_hyperparameter_settings_based_on_complexity",
-    "assimilation": {
-        "enabled": true,
-        "knowledge_base": "dynamic_knowledge_base"
-    },
-    "self_learning": {
-        "enabled": true,
-        "learning_rate": "dynamic_learning_rate",
-        "num_iterations": "dynamic_num_iterations",
-        "objective_function": "dynamic_objective_function"
-    },
-    "dynamic_adaptation": {
-        "enabled": true,
-        "adaptation_rate": "dynamic_adaptation_rate",
-        "adaptation_range": "dynamic_adaptation_range"
-    },
-    "learning_strategies": [
-        {
-            "name": "incremental_learning",
-            "enabled": true,
-            "learning_rate": "dynamic_learning_rate",
-            "num_iterations": "dynamic_num_iterations"
-        },
-        {
-            "name": "batch_learning",
-            "enabled": true,
-            "learning_rate": "dynamic_learning_rate",
-            "num_iterations": "dynamic_num_iterations"
-        }
-    ]
-}
-
-# logging_config.py
+# Beginning of logging_config.py
 import logging
+logging.basicConfig(level=logging.INFO)
+# End of logging_config.py
 
-def setup_logging():
-    logging.basicConfig(level=logging.INFO)
-    return logging.getLogger(__name__)
-
-# cache_utils.py
-import functools
+# Beginning of cache_utils.py
 import hashlib
+import functools
 
-def compute_hash(data):
-    return hashlib.sha256(str(data).encode()).hexdigest()
-
+# Dictionary to store the previous hash of data and hyperparameters
 cache_conditions = {
     'X_train_hash': None,
     'y_train_hash': None,
     'hyperparameters_hash': None,
 }
 
+# Function to compute hash of data
+def compute_hash(data):
+    return hashlib.sha256(str(data).encode()).hexdigest()
+
+# Function to invalidate cache if conditions change
 def invalidate_cache_if_changed(current_X_train, current_y_train, current_hyperparameters):
     current_X_train_hash = compute_hash(current_X_train)
     current_y_train_hash = compute_hash(current_y_train)
@@ -174,39 +184,71 @@ def invalidate_cache_if_changed(current_X_train, current_y_train, current_hyperp
     if (cache_conditions['X_train_hash'] != current_X_train_hash or
         cache_conditions['y_train_hash'] != current_y_train_hash or
         cache_conditions['hyperparameters_hash'] != current_hyperparameters_hash):
-        
         cached_bayesian_fit.cache_clear()
-        
         cache_conditions['X_train_hash'] = current_X_train_hash
         cache_conditions['y_train_hash'] = current_y_train_hash
         cache_conditions['hyperparameters_hash'] = current_hyperparameters_hash
+# End of cache_utils.py
 
-# models.py
-class BaseModel:
+# Beginning of models.py
+class YourModelClass:
     def __init__(self):
-        self.model = None
+        self.model = YourSpecificModel()
 
     def fit(self, X, y):
-        raise NotImplementedError
+        logging.info(f"Fitting model with data X: {X.shape}, y: {y.shape}")
+        self.model.fit(X, y)
+# End of models.py
 
-    def predict(self, X):
-        raise NotImplementedError
+# Beginning of knowledge_base.py
+from collections import deque
 
-class SimpleModel(BaseModel):
-    def __init__(self):
-        super().__init__()
-        # Simple model implementation
+class SimpleKnowledgeBase:
+    def __init__(self, max_recent_items=100):
+        self.data = {}
+        self.recent_updates = deque(maxlen=max_recent_items)
 
-class MediumModel(BaseModel):
-    def __init__(self):
-        super().__init__()
-        # Medium model implementation
+    def update(self, key, value):
+        with knowledge_lock:
+            if key in self.data:
+                self.data[key].extend(value)
+                self.data[key] = list(set(self.data[key]))
+            else:
+                self.data[key] = value
+            self.recent_updates.append((key, value))
+# End of knowledge_base.py
 
-class ComplexModel(BaseModel):
-    def __init__(self):
-        super().__init__()
-        # Complex model implementation
+# Beginning of optimization.py
+from skopt import BayesSearchCV
+from skopt.space import Real, Integer
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import Matern
 
+# Define hyperparameter space for Bayesian optimization
+param_space = {
+    'learning_rate': Real(1e-6, 1e-2, prior='log-uniform'),
+    'n_estimators': Integer(50, 200),
+    'max_depth': Integer(5, 15),
+    'subsample': Real(0.5, 1.0),
+    'min_samples_split': Integer(2, 10),
+    'min_samples_leaf': Integer(1, 10),
+}
+
+# Define a function to adjust the search space
+def adjust_search_space(current_space, performance, threshold=0.1):
+    adjusted_space = current_space.copy()
+    if performance > threshold:
+        adjusted_space['learning_rate'] = Real(current_space['learning_rate'].low * 0.1, 
+                                               current_space['learning_rate'].high * 10, 
+                                               prior='log-uniform')
+    else:
+        adjusted_space['learning_rate'] = Real(current_space['learning_rate'].low, 
+                                               current_space['learning_rate'].high * 0.1, 
+                                               prior='log-uniform')
+    return adjusted_space
+# End of optimization.py
+
+# Beginning of complexity.py
 def choose_model_based_on_complexity(complexity_factor):
     if complexity_factor < 10:
         return SimpleModel()
@@ -215,125 +257,49 @@ def choose_model_based_on_complexity(complexity_factor):
     else:
         return ComplexModel()
 
-# knowledge_base.py
-from collections import deque
-import asyncio
-import logging
-
-class SimpleKnowledgeBase:
-    def __init__(self, max_recent_items=100):
-        self.data = {}
-        self.recent_updates = deque(maxlen=max_recent_items)
-        self.lock = asyncio.Lock()
-
-    async def update(self, key, value):
-        async with self.lock:
-            if key in self.data:
-                self.data[key].extend(value)
-                self.data[key] = list(set(self.data[key]))
-            else:
-                self.data[key] = value
-            self.recent_updates.append((key, value))
-
-# optimization.py
-from skopt import BayesSearchCV
-from skopt.space import Real, Integer
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import Matern
-from sklearn.metrics import make_scorer
-import numpy as np
-
-def adjust_initial_search_space(param_space, complexity_factor):
+def choose_evaluation_metric(complexity_factor):
     if complexity_factor < 10:
-        param_space['n_estimators'] = Integer(50, 100)
-        param_space['learning_rate'] = Real(1e-4, 1e-2, prior='log-uniform')
+        return mean_squared_error
     elif 10 <= complexity_factor < 100:
-        param_space['n_estimators'] = Integer(100, 200)
-        param_space['learning_rate'] = Real(1e-5, 1e-2, prior='log-uniform')
+        return mean_absolute_error
     else:
-        param_space['n_estimators'] = Integer(200, 400)
-        param_space['learning_rate'] = Real(1e-6, 1e-2, prior='log-uniform')
-    return param_space
+        return partial(mean_squared_error, squared=False)
+# End of complexity.py
 
-def evaluate_performance(model, X_test, y_test):
-    y_pred = model.predict(X_test)
-    return np.mean((y_test - y_pred) ** 2)
-
-# complexity.py
-import functools
-
-@functools.lru_cache(maxsize=1024)
-def get_complexity_factor(input_data):
-    try:
-        complexity_factor = len(input_data)
-        return complexity_factor
-    except Exception as e:
-        logging.error(f"Error in get_complexity_factor: {str(e)}")
-        return 0
-
-def choose_num_iterations_based_on_complexity(complexity_factor):
-    if complexity_factor < 10:
-        return 50
-    elif 10 <= complexity_factor < 100:
-        return 100
-    else:
-        return 200
-
-# parallel_utils.py
+# Beginning of parallel_utils.py
+from multiprocessing import Pool
 import asyncio
-import concurrent.futures
-import multiprocessing
-import os
 
 async def parallel_dynamic_adaptation_async(adaptation_tasks):
     tasks = [adjust_dynamic_adaptation(task) for task in adaptation_tasks]
     return await asyncio.gather(*tasks)
 
-def choose_num_workers_based_on_complexity(complexity_factor):
-    max_cores = os.cpu_count() or 1
-    return min(max(1, complexity_factor // 10), max_cores)
+def parallelize_learning_strategy_adjustments(learning_strategies, knowledge_lock):
+    with Pool() as pool:
+        pool.map(lambda strategy: adjust_learning_strategy(strategy, knowledge_lock), learning_strategies)
+# End of parallel_utils.py
 
-# main.py
-import asyncio
-import json
-from logging_config import setup_logging
-from optimization import parallel_bayesian_optimization
-from knowledge_base import SimpleKnowledgeBase
-from models import choose_model_based_on_complexity
-from skopt.space import Real, Integer
+# Beginning of main.py
+from sklearn.model_selection import train_test_split
 
-async def main():
-    logger = setup_logging()
-    
-    # Load configuration
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-    
-    # Initialize knowledge base
-    knowledge_base = SimpleKnowledgeBase()
-    
-    # Setup model and optimization parameters
-    param_space = {
-        'learning_rate': Real(1e-6, 1e-2, prior='log-uniform'),
-        'n_estimators': Integer(50, 200),
-        'max_depth': Integer(5, 15),
-        'subsample': Real(0.5, 1.0),
-        'min_samples_split': Integer(2, 10),
-        'min_samples_leaf': Integer(1, 10),
-    }
-    
-    # Run optimization
-    best_params, best_score = await parallel_bayesian_optimization(
-        param_space, X_train, y_train, X_test, y_test, n_iterations=5
-    )
-    
-    if best_params is not None:
-        logger.info(f"Optimization complete. Best parameters: {best_params}")
-        logger.info(f"Best MSE: {best_score}")
-    else:
-        logger.error("Optimization failed to produce valid results.")
+# Assuming X and y are your feature matrix and target vector
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+# Perform parallel Bayesian optimization with dynamic complexity
+best_params, best_score = parallel_bayesian_optimization(
+    initial_param_space, X_train, y_train, X_test, y_test, n_iterations=5
+)
 
-```
+# Train final model with best parameters
+if best_params is not None:
+    final_model = YourModelClass().set_params(**best_params)
+    final_model.fit(X_train, y_train)
+    final_performance = evaluate_performance(final_model, X_test, y_test)
+    logging.info(f"Final model MSE on test set: {final_performance}")
+else:
+    logging.error("Optimization failed to produce valid results.")
+# End of main.py
+``` 
+
+# Each module's code block is clearly labeled with comments indicating the start and end of that module.
+# ## Original code correction Oct28 2024 , Working Concept November 12th 2023
