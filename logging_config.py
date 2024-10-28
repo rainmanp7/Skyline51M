@@ -1,7 +1,5 @@
 
-# logging_config.py
+# Beginning of logging_config.py
 import logging
-
-def setup_logging():
-    logging.basicConfig(level=logging.INFO)
-    return logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+# End of logging_config.py
