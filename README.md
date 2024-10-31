@@ -42,6 +42,7 @@ This file contains settings for logging, which helps to track the model's perfor
 ### `async_process_manager.py`
 
 * **Main Functional Purpose:** Implements robust async process management with resource monitoring.
+
 Implements Asynchronous Process Management to handel proper task prioritization, resource management,
 error handling and recovery.
 
