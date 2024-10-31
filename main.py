@@ -10,6 +10,58 @@ from skopt.space import Real, Integer
 from sklearn.model_selection import train_test_split
 
 async def main():
+
+process_manager = AsyncProcessManager()
+    
+    # Create tasks
+    tasks = [
+        ProcessTask(
+            name="model_training",
+            priority=1,
+            function=model.fit,
+            args=(X_train, y_train),
+            kwargs={}
+        ),
+        ProcessTask(
+            name="hyperparameter_optimization",
+            priority=2,
+            function=optimizer.optimize,
+            args=(param_space,),
+            kwargs={}
+        )
+    ]
+    
+    # Submit and run tasks
+    for task in tasks:
+        await process_manager.submit_task(task)
+    
+    results = await process_manager.run_tasks()
+    await process_manager.cleanup()
+    
+    return results
+
+# Run the async process
+results = asyncio.run(main())
+
+from sklearn.model_selection import train_test_split
+
+# Assuming X and y are your feature matrix and target vector
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Perform parallel Bayesian optimization with dynamic complexity
+best_params, best_score = parallel_bayesian_optimization(
+    initial_param_space, X_train, y_train, X_test, y_test, n_iterations=5
+)
+
+# Train final model with best parameters
+if best_params is not None:
+    final_model = YourModelClass().set_params(**best_params)
+    final_model.fit(X_train, y_train)
+    final_performance = evaluate_performance(final_model, X_test, y_test)
+    logging.info(f"Final model MSE on test set: {final_performance}")
+else:
+    logging.error("Optimization failed to produce valid results.")
+    
     logger = setup_logging()
     
     # Load configuration
