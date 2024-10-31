@@ -39,6 +39,12 @@ This file contains functions for creating, updating, and querying the knowledge 
 
 This file contains settings for logging, which helps to track the model's performance, debug issues, and monitor its behavior.
 
+### `async_process_manager.py`
+
+* **Main Functional Purpose:** Implements robust async process management with resource monitoring.
+Implements Asynchronous Process Management to handel proper task prioritization, resource management,
+error handling and recovery.
+
 ### `main.py`
 
 * **Main Functional Purpose:** Entry point for the Skyline51M model, which initializes and runs the model.
